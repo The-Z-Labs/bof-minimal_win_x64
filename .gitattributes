@@ -1,0 +1,10 @@
+* text=auto
+
+*.c text
+*.h text
+
+* text eol=lf
+
+*.exe binary
+*.obj binary
+*.lib binary

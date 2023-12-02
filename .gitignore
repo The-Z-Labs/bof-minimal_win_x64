@@ -5,6 +5,7 @@
 !*.c
 !*.h
 !*.bat
+!*.lib
 !LICENSE*
 !*.md
 

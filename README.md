@@ -1,1 +1,1 @@
-# bof-minimal_win_x64
+# How to write and run simple BOF

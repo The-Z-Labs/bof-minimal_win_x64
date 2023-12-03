@@ -1,6 +1,6 @@
 # How to write and run a simple BOF
 
-This repository contains example C code that shows how to write and run a simple BOF (Beacon Object File) using our [bof-launcher](https://github.com/The-Z-Labs/bof-launcher) library.
+This repository contains example C code that shows how to write, build and run a simple BOF ([Beacon Object File](https://hstechdocs.helpsystems.com/manuals/cobaltstrike/current/userguide/content/topics/beacon-object-files_main.htm)) using our [bof-launcher](https://github.com/The-Z-Labs/bof-launcher) library.
 
 The only dependency is the [Zig package](https://ziglang.org/download/) which we use here as a zero-dependency, drop-in C/C++ compiler that supports cross-compilation out-of-the-box. Download the package, add it to the `PATH` and you are ready to go.
 

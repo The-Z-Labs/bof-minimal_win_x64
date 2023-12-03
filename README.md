@@ -12,7 +12,7 @@ To build this project just run `build.bat` script. This script will build both, 
 @REM
 @REM `bof-launcher` library is not compatible with `__declspec(dllimport)` so we define
 @REM `DECLSPEC_IMPORT` to be empty.
-@REM `-lc` is needed for Zig to find `windows.h`, BOF is *not* linked with libc (but can still use it).
+@REM `-lc` is needed for Zig to find `windows.h` but BOF itself *is not* linked with libc (can still use it though).
 @REM
 zig build-obj -O ReleaseSmall -target x86_64-windows-gnu -lc -D"DECLSPEC_IMPORT=" example_bof.c
 
@@ -22,3 +22,12 @@ zig build-obj -O ReleaseSmall -target x86_64-windows-gnu -lc -D"DECLSPEC_IMPORT=
 @REM
 zig cc -lc -mcpu=x86_64 -o example_bof_runner.exe example_bof_runner.c bof-launcher_win_x64.lib ole32.lib ws2_32.lib
 ```
+
+After running the script two files will be generated:
+
+    example_bof.obj
+    example_bof_runner.exe
+
+The first one is our BOF. It weights only 916 bytes and prints Windows version to its output. The second one is an example BOF runner which loads `example_bof.obj` file and executes it directly (without linking) using our [bof-launcher](https://github.com/The-Z-Labs/bof-launcher) library and then it prints BOF's output to `stdout`. On my machine the output looks like:
+
+    Windows version: 10.0, OS build number: 22621

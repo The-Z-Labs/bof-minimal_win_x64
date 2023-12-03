@@ -2,11 +2,11 @@
 
 This repository contains example C code that shows how to write and run a simple BOF (Beacon Object File) using our [bof-launcher](https://github.com/The-Z-Labs/bof-launcher) library.
 
-The only dependency is the [Zig package](https://ziglang.org/download/) which we use here as a zero-dependency, drop-in C/C++ compiler that supports cross-compilation out-of-the-box. Download the package add it to the `PATH` and you are ready to go.
+The only dependency is the [Zig package](https://ziglang.org/download/) which we use here as a zero-dependency, drop-in C/C++ compiler that supports cross-compilation out-of-the-box. Download the package, add it to the `PATH` and you are ready to go.
 
 To build this project just run `build.bat` script. This script will build both, an example BOF and an example BOF runner. Let's take a look at it here:
 
-```
+```bat
 @REM STEP 1.
 @REM Build example BOF with `zig build-obj`.
 @REM

@@ -1,5 +1,5 @@
 @REM STEP 1.
-@REM Build BOF.
+@REM Build BOF with `zig build-obj`.
 @REM
 @REM `bof-launcher` library is not compatible with `__declspec(dllimport)` so we define
 @REM `DECLSPEC_IMPORT` to be empty.

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "bof.h"
+#include "bof_launcher_api.h"
 
 int main(void) {
     FILE* fp = fopen("example_bof.obj", "rb");

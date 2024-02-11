@@ -9,4 +9,4 @@ zig build-obj -O ReleaseSmall -target x86_64-windows-gnu -lc example_bof.c
 @REM Build example BOF runner with `zig cc` (which is basically a standalone, zero-dependency `clang` with
 @REM cross-compilation working out-of-the-box).
 @REM
-zig cc -lc -mcpu=x86_64 -o example_bof_runner.exe example_bof_runner.c bof_launcher_win_x64.lib ole32.lib ws2_32.lib
+zig cc -lc -mcpu=x86_64 -o example_bof_runner.exe example_bof_runner.c bof_launcher_win_x64.lib -lole32 -lws2_32

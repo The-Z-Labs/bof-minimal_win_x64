@@ -1,55 +1,85 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "bof_launcher_api.h"
 
-int main(void) {
-    FILE* fp = fopen("example_bof.obj", "rb");
-    if (fp == NULL) {
-        fprintf(stderr, "Failed to load `example_bof.obj`.\n");
-        return 1;
-    }
-
-    fseek(fp, 0, SEEK_END);
-    long len = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
-
-    void* buf = malloc(len);
-    if (buf == NULL) {
-        fprintf(stderr, "Failed to allocate memory.\n");
-        return 1;
-    }
-
-    if (fread(buf, 1, len, fp) != len) {
-        fprintf(stderr, "Failed to read the file.\n");
-        return 1;
-    }
-    fclose(fp);
-
-    if (bofLauncherInit() < 0) {
-        fprintf(stderr, "Failed to init bof-launcher library.\n");
-    }
-
-    BofObjectHandle bof_handle;
-    if (bofObjectInitFromMemory((unsigned char*)buf, len, &bof_handle) < 0) {
-        fprintf(stderr, "Failed to parse/init BOF.\n");
-        return 1;
-    }
-    free(buf);
- 
+int main(int argc, char *argv[]) {
+    int ret_code = 0;
+    FILE* file = NULL;
+    long file_len = 0;
+    const char* file_name = argv[1];
+    unsigned char* file_data = NULL;
+    BofObjectHandle bof_handle = {0};
     BofContext* bof_context = NULL;
-    if (bofObjectRun(bof_handle, NULL, 0, &bof_context) < 0) {
-        fprintf(stderr, "Failed to run BOF.\n");
-        return 1;
+    const char* bof_output = NULL;
+    BofArgs* bof_args = NULL;
+
+    if (argc < 2) {
+        printf("Usage: %s <bof-filename>\n", argv[0]);
+        return 0;
+    }
+    printf("<bof-filename>: %s\n", file_name);
+
+    file = fopen(file_name, "rb");
+    if (file == NULL) {
+        printf("File not found.\n");
+        goto error;
     }
 
-    const char* output = bofContextGetOutput(bof_context, NULL);
-    if (output) {
-        printf("\n%s\n", output);
-    }
-    bofContextRelease(bof_context);
+    fseek(file, 0, SEEK_END);
+    file_len = ftell(file);
+    fseek(file, 0, SEEK_SET);
 
+    printf("File size is: %ld\n", file_len);
+
+    file_data = malloc(file_len);
+    if (file_data == NULL) {
+        goto error;
+    }
+
+    if (fread(file_data, 1, file_len, file) != file_len) {
+        printf("Failed to read the file.\n");
+        goto error;
+    }
+
+    if (bofObjectInitFromMemory(file_data, file_len, &bof_handle) != 0) {
+        goto error;
+    }
+
+    printf("Running BOF from command line C application...\n");
+
+    if (bofArgsInit(&bof_args) != 0) {
+        goto error;
+    }
+    bofArgsBegin(bof_args);
+    for (int i = 2; i < argc; ++i) {
+        bofArgsAdd(bof_args, (unsigned char*)argv[i], strlen(argv[i]));
+    }
+    bofArgsEnd(bof_args);
+ 
+    if (bofObjectRun(bof_handle, (unsigned char*)bofArgsGetBuffer(bof_args),
+        bofArgsGetBufferSize(bof_args), &bof_context) != 0) {
+        goto error;
+    }
+    if (bof_context == NULL) {
+        goto error;
+    }
+
+    bof_output = bofContextGetOutput(bof_context, NULL);
+    if (bof_output) {
+        printf("\n======== BOF OUTPUT ========\n");
+        printf("%s", bof_output);
+        printf("============================\n");
+    }
+
+cleanup:
     bofObjectRelease(bof_handle);
-    bofLauncherRelease();
-
-    return 0;
+    if (bof_args) bofArgsRelease(bof_args);
+    if (bof_context) bofContextRelease(bof_context);
+    if (file_data) free(file_data);
+    if (file) fclose(file);
+    return ret_code;
+error:
+    ret_code = 1;
+    goto cleanup;
 }

@@ -1,3 +1,5 @@
+@ECHO OFF
+
 @REM STEP 1.
 @REM Build example BOF with `zig build-obj`.
 @REM

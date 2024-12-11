@@ -26,6 +26,22 @@ After running the script two files will be generated:
     example_bof.obj
     example_bof_runner.exe
 
-The first one is our BOF. It weights only 923 bytes and prints Windows version to its output. The second one is an example BOF runner which loads `example_bof.obj` file and executes it directly (without linking) using our [bof-launcher](https://github.com/The-Z-Labs/bof-launcher) library and then it prints BOF's output to `stdout`. On my machine the output looks like:
+The first one is our BOF. It weights only 923 bytes and prints Windows version to its output. The second one is an example BOF runner which can load and execute any BOF using our [bof-launcher](https://github.com/The-Z-Labs/bof-launcher) library.
 
-    Windows version: 10.0, OS build number: 22621
+To run example BOF, do:
+
+```
+.\example_bof_runner.exe .\example_bof.obj
+```
+
+On my machine the output looks like:
+
+```
+<bof-filename>: .\example_bof.obj
+File size is: 923
+Running BOF from command line C application...
+
+======== BOF OUTPUT ========
+Windows version: 10.0, OS build number: 22631
+============================
+```
